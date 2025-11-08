@@ -1,0 +1,6 @@
+asgiref==3.10.0
+django==5.2.8
+greenlet==3.2.4
+sqlalchemy==2.0.44
+sqlparse==0.5.3
+typing-extensions==4.15.0
