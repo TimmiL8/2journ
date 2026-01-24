@@ -66,7 +66,6 @@ class Place(models.Model):
     # longitude = models.FloatField()
     # ------------------------------- #
     # Filtering
-    categories = models.ManyToManyField(Category)
     popularity = models.FloatField() # 0-1
     price = models.FloatField() # Range unknown
     rating = models.FloatField() # 0-10
