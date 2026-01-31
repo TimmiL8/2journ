@@ -1,6 +1,23 @@
+<<<<<<< HEAD
 asgiref==3.10.0
 django==5.2.8
 greenlet==3.2.4
 sqlalchemy==2.0.44
 sqlparse==0.5.3
 typing-extensions==4.15.0
+=======
+APScheduler==3.11.2
+asgiref==3.11.0
+certifi==2026.1.4
+charset-normalizer==3.4.4
+Django==6.0.1
+django-apscheduler==0.7.0
+django-filter==25.2
+djangorestframework==3.16.1
+idna==3.11
+python-dotenv==1.2.1
+requests==2.32.5
+sqlparse==0.5.5
+tzlocal==5.3.1
+urllib3==2.6.3
+>>>>>>> dev/auth
