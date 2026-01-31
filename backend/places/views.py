@@ -11,9 +11,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.http.response import JsonResponse
 from places.filters import PlacesFilter
 from places.models import Place
-from places.serializers import PlaceListSerializer, PlaceDetailSerializer
+from places.serializers import PlaceListSerializer, PlaceDetailSerializer, PlaceSearchSerializer
 from dotenv import load_dotenv
-
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 import requests
 import os
 
@@ -47,6 +48,7 @@ class PlaceDetailView(generics.RetrieveAPIView):
             raise NotFound("Place not found.")
         
 class PlaceSearchList(APIView):
+    @swagger_auto_schema(request_body=PlaceSearchSerializer)
     def post(self, request):
         load_dotenv()
         API_KEY = os.getenv("GOOGLE_PLACES_API")
