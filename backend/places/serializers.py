@@ -1,5 +1,7 @@
 from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from places.models import Place
+
 class PlaceListSerializer(ModelSerializer):
     """
     Serializer for place list
@@ -12,6 +14,8 @@ class PlaceListSerializer(ModelSerializer):
         model = Place
         fields = ('id', 'name', 'short_name', 'category', 'popularity', 'price', 'rating', 'country', 'region')
 
+class PlaceSearchSerializer(serializers.Serializer):
+    searchQuery = serializers.CharField(help_text="The location or place name to search for.")
 
 class PlaceDetailSerializer(ModelSerializer):
     """
