@@ -7,9 +7,6 @@ requires-python = ">=3.13"
 dependencies = [
     "dj-rest-auth==7.0.2",
     "django>=5.2.8",
-<<<<<<< HEAD
-    "djangorestframework>=3.16.1",
-=======
     "django-allauth>=65.14.0",
     "django-filter==25.2",
     "djangorestframework==3.16.1",
@@ -19,7 +16,6 @@ dependencies = [
     "pillow==12.1.0",
     "python-dotenv>=1.2.1",
     "requests>=2.32.5",
->>>>>>> dev/auth
     "sqlalchemy>=2.0.44",
     "uuid>=1.30",
 ]
