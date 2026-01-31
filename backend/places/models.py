@@ -2,61 +2,25 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
-class Category(models.Model):
+class Type(models.Model):
     name = models.CharField(max_length=255)
 
-class Attributes(models.Model):
-    """
-    A class to store additional info about the place. 
-    """
-    # class ThreeGradeScale(models.TextChoices):
-    #     POOR = "P", _("Poor")
-    #     AVERAGE = "A", _("Average")
-    #     GREAT = "G", _("Great")
-
-    atm = models.BooleanField(blank=True)
-    bar = models.BooleanField(blank=True)
-    byo = models.BooleanField(blank=True)
-    essential_reservation = models.BooleanField(blank=True)
-
-class Pictures(models.Model):
-    """
-    Picture ids for a place object
-    1. To obtain the original size of the photo, combine
-    prefix + original + suffix:
-    https://fastly.4sqi.net/img/general/original/1049719_PiLE0Meoa27AkuLvSaNwcvswnmYRa0vxLQkOrpgMlwk.jpg
-    2. To scale down this photo, 1) determine the size you want,
-    paying close attention to not exceed the maximum width and height. 2) using your desired width (800px) &
-    height (600px), convert this to a size (width x height) and combine
-    prefix + size + suffix:
-    https://fastly.4sqi.net/img/general/800x600/1049719_PiLE0Meoa27AkuLvSaNwcvswnmYRa0vxLQkOrpgMlwk.jpg
-    3. To crop this photo, determine the size you would like (ie. 400x400) and combine
-    prefix + size + suffix:
-    https://fastly.4sqi.net/img/general/200x200/1049719_PiLE0Meoa27AkuLvSaNwcvswnmYRa0vxLQkOrpgMlwk.jpg
-
-    """
-    id = models.AutoField(primary_key=True)
-    prefix = models.CharField(max_length=255)
-    suffix = models.CharField(max_length=255)
-    place_id = models.IntegerField()
-    width = models.IntegerField()
-    height = models.IntegerField()
-    created_at = models.DateTimeField()
-
-
-# Use foursquare API to fetch objects
+# Use Google Places API(New) to fetch objects
 class Place(models.Model):
     id = models.CharField(primary_key=True, max_length=255)
     # Overview
     name = models.CharField(max_length=255)
-    description = models.TextField()
-    short_name = models.CharField(max_length=255)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    # Pictures  Docs: https://docs.foursquare.com/fsq-developers-places/reference/place-photos
-    pictures = models.ManyToManyField(Pictures)
+    # ---To be decided. Depends on quota -----
+    # picture =
+    # description = models.TextField(blank=True)
+    # -----------------------------------------
+    display_name = models.CharField(max_length=255)
+    primary_type = models.ForeignField(Type, on_delete=models.CASCADE)
+    types = models.ManyToManyField(Type, on_delete=models.CASCADE, related_name="places")
 
+    # picture = 
     # ------------------------------- #
-    # Location
+    # Location (Parsed from address)
     address = models.TextField()
     region = models.TextField()
     country = models.TextField()
@@ -66,19 +30,46 @@ class Place(models.Model):
     # longitude = models.FloatField()
     # ------------------------------- #
     # Filtering
-    popularity = models.FloatField() # 0-1
-    price = models.FloatField() # Range unknown
+    # popularity = models.FloatField() # 0-1
+    price = models.FloatField()
     rating = models.FloatField() # 0-10
     # Contact info
-    email = models.EmailField()
     telephone = models.TextField()
     website = models.URLField()
-    # Open/close (Find the way to store the "regular" object)
-    # open = models.TimeField()
-    # close = models.TimeField()
-    # is_open = models.BooleanField()
-    # Socials
-    # facebook_id = models.CharField(max_length=255)
-    # instagram = models.CharField(max_length=255)
-    # twitter = models.CharField(max_length=255)
+    # Amenities
+    allows_dogs = models.BooleanField(default=False)
+    allows_outdoor_seating = models.BooleanField(default=False)
+    allows_reservations = models.BooleanField(default=False)
+    serves_vegetarian_food = models.BooleanField(default=False)
+    has_restroom = models.BooleanField(default=False)
+    good_for_children = models.BooleanField(default=False)
+    has_wi_fi = models.BooleanField(default=False)
     # ------------------------------- #
+
+    def __str__(self):
+        return self.name
+
+class OpeningPeriod(models.Model):
+    DAY_CHOICES = [
+        (0, 'Sunday'),
+        (1, 'Monday'),
+        (2, 'Tuesday'),
+        (3, 'Wednesday'),
+        (4, 'Thursday'),
+        (5, 'Friday'),
+        (6, 'Saturday'),
+    ]
+
+    place = models.ForeignKey(Place, related_name='opening_periods', on_delete=models.CASCADE)
+    
+    open_day = models.IntegerField(choices=DAY_CHOICES)
+    open_time = models.TimeField() 
+    
+    close_day = models.IntegerField(choices=DAY_CHOICES)
+    close_time = models.TimeField() 
+
+    class Meta:
+        ordering = ['open_day', 'open_time']
+
+    def __str__(self):
+        return f"{self.get_open_day_display()}: {self.open_time} - {self.close_time}"
