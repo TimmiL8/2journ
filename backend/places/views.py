@@ -47,31 +47,31 @@ class PlaceDetailView(generics.RetrieveAPIView):
             raise NotFound("Place not found.")
         
 class PlaceSearchList(APIView):
-    def post(self, request):
-        load_dotenv()
-        API_KEY = os.getenv("GOOGLE_PLACES_API")
-       
-        search_query = request.data.get("searchQuery")
-        if not search_query:
-            return Response({"error": "searchQuery is required"}, status=status.HTTP_400_BAD_REQUEST)
-        
-        url = "https://places.googleapis.com/v1/places:searchText"
-        headers = {
-            "Content-Type":"application/json",
-            "X-Goog-FieldMask":"places.displayName,places.formattedAddress,places.priceLevel",
-            "X-Goog-Api-Key": API_KEY,
-        }
-        payload = {
-            "textQuery": search_query
-        }
+    def post(self, request, search_query):
+        # load_dotenv()
+        # API_KEY = os.getenv("GOOGLE_PLACES_API")
+        #
 
-        response = requests.post(url, json=payload, headers=headers)
-        response.raise_for_status() 
-        data = response.json()
-
-        with open('data.json', 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
-        
-        return JsonResponse(data)
+        # if not search_query:
+        #     return Response({"error": "searchQuery is required"}, status=status.HTTP_400_BAD_REQUEST)
+        #
+        # url = "https://places.googleapis.com/v1/places:searchText"
+        # headers = {
+        #     "Content-Type":"application/json",
+        #     "X-Goog-FieldMask":"places.displayName,places.formattedAddress,places.priceLevel",
+        #     "X-Goog-Api-Key": API_KEY,
+        # }
+        # payload = {
+        #     "textQuery": search_query
+        # }
+        #
+        # response = requests.post(url, json=payload, headers=headers)
+        # response.raise_for_status()
+        # data = response.json()
+        #
+        # with open('data.json', 'w', encoding='utf-8') as f:
+        #     json.dump(data, f, ensure_ascii=False, indent=4)
+        places = Place.objects.filter(name__icontains=search_query)
+        return Response(list(places.values()))
 
 

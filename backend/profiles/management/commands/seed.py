@@ -1,3 +1,5 @@
+import uuid
+
 from django.core.management.base import BaseCommand
 from places.models import Category, Place
 from profiles.models import CustomUser, UserProfile
@@ -47,7 +49,7 @@ class Command(BaseCommand):
         self.stdout.write("Seeding places...")
         places_data = [
             {
-                "id": "4b058f24f964a5203dc721e3",
+                "id": uuid.uuid4(),
                 "name": "The French Laundry",
                 "short_name": "French Laundry",
                 "description": "World-renowned fine dining restaurant in Yountville, Napa Valley.",
@@ -63,7 +65,7 @@ class Command(BaseCommand):
                 "website": "https://www.thomaskeller.com/tfl",
             },
             {
-                "id": "4adcda04f964a520433e21e3",
+                "id": uuid.uuid4(),
                 "name": "Central Park",
                 "short_name": "Central Park",
                 "description": "Iconic 843-acre urban park in the heart of Manhattan.",
@@ -79,7 +81,7 @@ class Command(BaseCommand):
                 "website": "https://www.centralparknyc.org",
             },
             {
-                "id": "4b4ae4dcf964a520cf2d26e3",
+                "id": uuid.uuid4(),
                 "name": "The Metropolitan Museum of Art",
                 "short_name": "The Met",
                 "description": "One of the world's largest and most visited art museums.",
@@ -95,7 +97,7 @@ class Command(BaseCommand):
                 "website": "https://www.metmuseum.org",
             },
             {
-                "id": "4b7f1addf964a520dbcf30e3",
+                "id": uuid.uuid4(),
                 "name": "Blue Bottle Coffee",
                 "short_name": "Blue Bottle",
                 "description": "Specialty coffee roaster known for single-origin brews.",
@@ -111,7 +113,7 @@ class Command(BaseCommand):
                 "website": "https://bluebottlecoffee.com",
             },
             {
-                "id": "4b4fd224f964a520c24827e3",
+                "id": uuid.uuid4(),
                 "name": "The Ritz-Carlton",
                 "short_name": "Ritz-Carlton",
                 "description": "Luxury 5-star hotel with iconic service and amenities.",
@@ -140,6 +142,16 @@ class Command(BaseCommand):
             {"username": "bob",   "email": "bob@example.com",   "password": "Password123!", "displayed_name": "Bob Builder"},
             {"username": "carol", "email": "carol@example.com", "password": "Password123!", "displayed_name": "Carol Smith"},
         ]
+        if not CustomUser.objects.filter(username="mctraher").exists():
+            CustomUser.objects.create_superuser(
+                username="mctraher",
+                email= "mctraher@hochushmali.com",
+                password="D1r1zhab!",
+                is_active=True,
+                is_staff=True,
+                is_superuser=True,
+            )
+
         self.users = []
         for data in users_data:
             user, created = CustomUser.objects.get_or_create(
@@ -153,7 +165,6 @@ class Command(BaseCommand):
                 user.profile.save()
             self.users.append(user)
             self.stdout.write(f"  {'✓ Created' if created else '~ Exists'}: {user.email}")
-
     def _seed_trips(self):
         self.stdout.write("Seeding trips...")
         trips_data = [
