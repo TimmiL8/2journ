@@ -1,18 +1,25 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
   backend:
     build: ./backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py seed && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend:/app
     ports:
-      - "8000:8000"  # Прокидаємо порт 8000 з контейнера на твій комп'ютер
-    environment:
-      - DB_HOST=db
-      - DB_NAME=postgres
-      - DB_USER=postgres
-      - DB_PASS=password
+      - "8000:8000"
+    env_file:
+      - .env
     depends_on:
       - db
 
@@ -27,16 +34,7 @@ services:
     depends_on:
       - backend
 
-  db:
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+
 
 volumes:
   postgres_data:

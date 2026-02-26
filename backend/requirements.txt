@@ -9,3 +9,4 @@ Pillow==11.1.0
 django-filter==24.3
 dj-rest-auth[with_social]
 django-allauth==65.3.0
+uuid
