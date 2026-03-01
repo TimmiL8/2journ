@@ -18,7 +18,7 @@ interface NavButtonProps {
 
 export default function SidePanel() {
     return (
-        <div className="h-full w-full max-w-[280px] bg-white rounded-2xl flex flex-col justify-between p-6">
+        <div className="h-full w-full max-w-[280px] bg-white rounded-2xl flex flex-col justify-between p-6 overflow-hidden shadow-[0_0_10px_rgba(0,0,0,0.2)]">
             <div className="flex flex-col items-start gap-2">
                 <NavButton navPath={"/"} Icon={HomeIcon} title={"Home"} />
                 <NavButton navPath={"/search-place"} Icon={SearchPlacesIcon} title={"Search place"} />
