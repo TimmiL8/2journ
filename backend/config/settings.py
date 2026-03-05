@@ -59,6 +59,7 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'dj_rest_auth.jwt_auth.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ]
 }
 
@@ -153,14 +154,16 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': True,
+    'LOGIN_URL': 'rest_framework:login',
+    'LOGOUT_URL': 'rest_framework:logout',
     'SECURITY_DEFINITIONS': {
-        'Bearer': {
+        'Token': {
             'type': 'apiKey',
             'name': 'Authorization',
-            'in': 'header'
+            'in': 'header',
         }
-    },
-    'USE_SESSION_AUTH': False,
+    }
 }
 REST_USE_JWT = True
 REST_AUTH = {
