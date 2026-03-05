@@ -28,12 +28,16 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "requests" },
     { name = "sqlalchemy" },
+    { name = "uuid" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "dj-rest-auth", specifier = "==7.0.2" },
     { name = "django", specifier = ">=5.2.8" },
+<<<<<<< HEAD
+    { name = "djangorestframework", specifier = ">=3.16.1" },
+=======
     { name = "django-allauth", specifier = ">=65.14.0" },
     { name = "django-filter", specifier = "==25.2" },
     { name = "djangorestframework", specifier = "==3.16.1" },
@@ -43,7 +47,9 @@ requires-dist = [
     { name = "pillow", specifier = "==12.1.0" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "requests", specifier = ">=2.32.5" },
+>>>>>>> dev/auth
     { name = "sqlalchemy", specifier = ">=2.0.44" },
+    { name = "uuid", specifier = ">=1.30" },
 ]
 
 [[package]]
@@ -121,6 +127,8 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< HEAD
+=======
 name = "django-allauth"
 version = "65.14.0"
 source = { registry = "https://pypi.org/simple" }
@@ -174,6 +182,7 @@ wheels = [
 ]
 
 [[package]]
+>>>>>>> dev/auth
 name = "djangorestframework"
 version = "3.16.1"
 source = { registry = "https://pypi.org/simple" }
@@ -186,6 +195,8 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< HEAD
+=======
 name = "djangorestframework-simplejwt"
 version = "5.5.1"
 source = { registry = "https://pypi.org/simple" }
@@ -233,6 +244,7 @@ wheels = [
 ]
 
 [[package]]
+>>>>>>> dev/auth
 name = "greenlet"
 version = "3.2.4"
 source = { registry = "https://pypi.org/simple" }
@@ -493,6 +505,12 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< HEAD
+name = "uuid"
+version = "1.30"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ce/63/f42f5aa951ebf2c8dac81f77a8edcc1c218640a2a35a03b9ff2d4aa64c3d/uuid-1.30.tar.gz", hash = "sha256:1f87cc004ac5120466f36c5beae48b4c48cc411968eed0eaecd3da82aa96193f", size = 5811, upload-time = "2007-05-26T11:13:24Z" }
+=======
 name = "uritemplate"
 version = "4.2.0"
 source = { registry = "https://pypi.org/simple" }
@@ -509,3 +527,4 @@ sdist = { url = "https://files.pythonhosted.org/packages/c7/24/5f1b3bdffd70275f6
 wheels = [
     { url = "https://files.pythonhosted.org/packages/39/08/aaaad47bc4e9dc8c725e68f9d04865dbcb2052843ff09c97b08904852d84/urllib3-2.6.3-py3-none-any.whl", hash = "sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4", size = 131584, upload-time = "2026-01-07T16:24:42.685Z" },
 ]
+>>>>>>> dev/auth
