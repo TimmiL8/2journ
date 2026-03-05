@@ -181,4 +181,3 @@ SITE_ID = 1
 # For now. Remove to enable email confirmation
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False
-AUTH_USER_MODEL = 'profiles.User'
