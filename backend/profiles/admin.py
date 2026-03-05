@@ -6,7 +6,3 @@ from .models import CustomUser, UserProfile
 
 admin.site.register(CustomUser)
 admin.site.register(UserProfile)
-from .models import User, Profile
-
-admin.site.register(User)
-admin.site.register(Profile)
