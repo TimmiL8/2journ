@@ -32,10 +32,11 @@ class PlaceDetailSerializer(ModelSerializer):
     class Meta:
         model = Place
         fields = ('id', 'name', 'description', 'short_name', 'category', 'popularity', 'price', 'rating', 'country',
-                  'region', 'pictures', 'website')
+                  'region', 'pictures', 'website', 'is_favourite')
 
     def get_is_favourite(self, obj):
         return getattr(obj, 'is_favourite', False)
+
 class PlaceUpdateSerializer(ModelSerializer):
     """
         Serializer for place update
