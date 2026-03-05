@@ -21,6 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+load_dotenv()
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'dj_rest_auth.jwt_auth.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ]
 }
 
@@ -152,14 +154,16 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': True,
+    'LOGIN_URL': 'rest_framework:login',
+    'LOGOUT_URL': 'rest_framework:logout',
     'SECURITY_DEFINITIONS': {
-        'Bearer': {
+        'Token': {
             'type': 'apiKey',
             'name': 'Authorization',
-            'in': 'header'
+            'in': 'header',
         }
-    },
-    'USE_SESSION_AUTH': False,
+    }
 }
 REST_USE_JWT = True
 REST_AUTH = {
@@ -181,3 +185,4 @@ SITE_ID = 1
 # For now. Remove to enable email confirmation
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False
+
