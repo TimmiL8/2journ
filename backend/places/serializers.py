@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from places.models import Place
-
+from profiles.models import FavouritePlace
 class PlaceListSerializer(ModelSerializer):
     """
     Serializer for place list
@@ -10,12 +10,14 @@ class PlaceListSerializer(ModelSerializer):
         - Sorting fields: popularity, price, rating
         - Category fields: category, country, region
     """
+
+    is_favourite = serializers.SerializerMethodField()
     class Meta:
         model = Place
-        fields = ('id', 'name', 'short_name', 'category', 'popularity', 'price', 'rating', 'country', 'region')
+        fields = ('id', 'name', 'short_name', 'category', 'popularity', 'price', 'rating', 'country', 'region', "is_favourite")
 
-class PlaceSearchSerializer(serializers.Serializer):
-    searchQuery = serializers.CharField(help_text="The location or place name to search for.")
+    def get_is_favourite(self, obj):
+        return getattr(obj, 'is_favourite', False)
 
 class PlaceDetailSerializer(ModelSerializer):
     """
@@ -25,11 +27,15 @@ class PlaceDetailSerializer(ModelSerializer):
             - Sorting fields: popularity, price, rating
             - Category fields: category, country, region
         """
+    is_favourite = serializers.SerializerMethodField()
+
     class Meta:
         model = Place
         fields = ('id', 'name', 'description', 'short_name', 'category', 'popularity', 'price', 'rating', 'country',
                   'region', 'pictures', 'website')
 
+    def get_is_favourite(self, obj):
+        return getattr(obj, 'is_favourite', False)
 class PlaceUpdateSerializer(ModelSerializer):
     """
         Serializer for place update
@@ -42,3 +48,8 @@ class PlaceUpdateSerializer(ModelSerializer):
         model = Place
         fields = ('id', 'name', 'description', 'short_name', 'category', 'popularity', 'price', 'rating', 'country',
                   'region', 'pictures', 'website')
+
+class FavouritePlaceListSerializer(ModelSerializer):
+    class Meta:
+        model = FavouritePlace
+        fields = ('id', 'place_id', 'created_at')

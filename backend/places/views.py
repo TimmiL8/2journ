@@ -1,19 +1,14 @@
-from rest_framework.permissions import AllowAny
+from django.db.models.expressions import OuterRef, Exists
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.filters import OrderingFilter
-from rest_framework import status
 from rest_framework.exceptions import NotFound
-from django_filters import rest_framework as filters
-from django_filters.rest_framework import DjangoFilterBackend
 from django.http.response import JsonResponse
 from places.filters import PlacesFilter
-from places.models import Place
+from profiles.models import Place, FavouritePlace
 from places.serializers import PlaceListSerializer, PlaceDetailSerializer
-from dotenv import load_dotenv
-
+from rest_framework import status
 import requests
 import os
 
@@ -21,31 +16,33 @@ import os
 import json
 # Create your views here.
 
-class PlacesListView(generics.ListAPIView):
-    # authentication_classes = (SessionAuthentication, )
-    # authentication_classes = (AllowAny,)
-    queryset = Place.objects.all()
-    filter_backends = (OrderingFilter, DjangoFilterBackend,)
-    filterset_class = PlacesFilter
-    ordering_fields = ['price', 'name', 'rating']
-    ordering_field = ['-name']
-    serializer_class = PlaceListSerializer
+class PlacesListView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def get(self, request):
+        favourite_subquery = FavouritePlace.objects.filter(
+            user_profile=request.user.profile,
+            place_id = OuterRef('pk')
+        )
+        places = Place.objects.annotate(is_favourite=Exists(favourite_subquery))
+        serializer = PlaceListSerializer(places, many=True, context={'request': request})
+        return Response(serializer.data)
 
-class PlaceDetailView(generics.RetrieveAPIView):
-    serializer_class = PlaceDetailSerializer
-
-    def get_object(self):
-        place_id = self.request.query_params.get('id')
-
-        if not place_id:
-            raise NotFound("ID query parameter is required.")
-
+class PlaceDetailView(APIView):
+    def get(self, request, pk):
         try:
-            return Place.objects.get(id=place_id)
-        except (Place.DoesNotExist, ValueError):
-            raise NotFound("Place not found.")
-        
+            favourite_subquery = FavouritePlace.objects.filter(
+                user_profile=request.user.profile,
+                place_id=OuterRef('pk')
+            )
+            place = Place.objects.annotate(
+                is_favourite=Exists(favourite_subquery)
+            ).get(pk=pk)
+        except Place.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = PlaceDetailSerializer(place, context={'request': request})
+        return Response(serializer.data)
+
 class PlaceSearchList(APIView):
     def post(self, request, search_query):
         # load_dotenv()
@@ -73,5 +70,31 @@ class PlaceSearchList(APIView):
         #     json.dump(data, f, ensure_ascii=False, indent=4)
         places = Place.objects.filter(name__icontains=search_query)
         return Response(list(places.values()))
+class ListFavouritePlaces(APIView):
+    # Add appropriate auth classes
 
+    def get(self, request):
+        current_user = request.user
+        favourites = FavouritePlace.objects.filter(user=current_user)
+        if favourites:
+            return JsonResponse("No favourites found", safe=False)
+        return JsonResponse(favourites)
+
+class PlaceToggleFavouriteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        try:
+            place = Place.objects.get(pk=pk)
+        except Place.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        favourite, created = FavouritePlace.objects.get_or_create(
+            user_profile=request.user.profile,
+            place_id=place
+        )
+        if not created:
+            favourite.delete()
+            return Response({'is_favourite': False}, status=status.HTTP_200_OK)
+        return Response({'is_favourite': True}, status=status.HTTP_201_CREATED)
 
