@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from django.http.response import JsonResponse
 from places.filters import PlacesFilter
-from profiles.models import Place, FavouritePlace
+from favourite_places.models import Place, FavouritePlace
 from places.serializers import PlaceListSerializer, PlaceDetailSerializer
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema

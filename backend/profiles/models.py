@@ -8,8 +8,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
-from places.models import Place
-
 class CustomUser(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     email = models.EmailField(unique=True)
@@ -30,7 +28,3 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance, displayed_name=instance.username)
 
-class FavouritePlace(models.Model):
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="favourite_places")
-    place_id = models.ForeignKey(Place, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
