@@ -30,7 +30,3 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance, displayed_name=instance.username)
 
-class FavouritePlace(models.Model):
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="favourite_places")
-    place_id = models.ForeignKey(Place, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)

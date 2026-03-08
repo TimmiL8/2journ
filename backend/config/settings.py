@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -51,8 +50,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     "places",
-    "trips",
     "profiles",
+    "trips",
+    "favourite_places",
     "django.contrib.admin"
 ]
 
@@ -170,7 +170,7 @@ REST_AUTH = {
     'USE_JWT': True,
     "JWT_AUTH_COOKIE":'_auth',
     "JWT_AUTH_REFRESH_COOKIE":'_refresh',
-    "JWT_AUTH_HTTPONLY": False, # Change in future
+    "JWT_AUTH_HTTPONLY": False,
 }
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
