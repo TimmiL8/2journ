@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from places.models import Place
-from profiles.models import FavouritePlace
+from favourite_places.models import FavouritePlace
 class PlaceListSerializer(ModelSerializer):
     """
     Serializer for place list

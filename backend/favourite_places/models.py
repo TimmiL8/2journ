@@ -1,5 +1,5 @@
 from django.db import models
-from profiles.moedls import UserProfile
+from profiles.models import UserProfile
 from places.models import Place
 # Create your models here.
 class FavouritePlace(models.Model):
