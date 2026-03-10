@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.utils.translation import gettext_lazy as _
+import uuid
 # Create your models here.
 
 class Category(models.Model):
@@ -7,7 +8,7 @@ class Category(models.Model):
 
 class Attributes(models.Model):
     """
-    A class to store additional info about the place. 
+    A class to store additional info about the place.
     """
     # class ThreeGradeScale(models.TextChoices):
     #     POOR = "P", _("Poor")

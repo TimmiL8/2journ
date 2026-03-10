@@ -1,0 +1,12 @@
+Django==5.1.5
+djangorestframework==3.15.2
+djangorestframework-simplejwt==5.3.1
+drf-yasg==1.21.8
+django-cors-headers==4.6.0
+psycopg2-binary==2.9.10
+python-dotenv==1.2.1
+Pillow==11.1.0
+django-filter==24.3
+dj-rest-auth[with_social]
+django-allauth==65.3.0
+uuid
