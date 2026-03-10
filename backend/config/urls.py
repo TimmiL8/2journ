@@ -17,16 +17,19 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from .swagger import schema_viewfrom rest_framework.routers import DefaultRouter
+from .swagger import schema_view
+from rest_framework.routers import DefaultRouter
 from trips.views import TripViewSet
+
 router = DefaultRouter()
 router.register(r'trips', TripViewSet, basename='trip')
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("places/", include("places.urls")),
-    path('swagger/', schema_view.with_ui('swagger',
-                                             cache_timeout=0), name='schema-swagger-ui'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path("auth/", include("dj_rest_auth.urls")),
-    path('auth/registration/', include('dj_rest_auth.registration.urls')),
-    path('api-auth/', include('rest_framework.urls'))
+    path("auth/registration/", include("dj_rest_auth.registration.urls")),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include(router.urls)),
 ]
