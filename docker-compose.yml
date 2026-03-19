@@ -26,13 +26,17 @@ services:
   frontend:
     build: ./frontend
     command: npx next dev
+
     volumes:
       - ./frontend:/app
       - /app/node_modules
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     depends_on:
       - backend
+
 
 
 
