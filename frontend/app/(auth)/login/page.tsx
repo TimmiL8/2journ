@@ -1,7 +1,21 @@
+"use client";
+
 import Image from 'next/image'
 import Link from "next/link";
+import { useState, type FormEvent } from "react";
+import { useLogin } from "../../hooks/useAuth";
+
 
 export default function LoginPage() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const login = useLogin();
+
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+        login.mutate({ email, password })
+    }
+
 
     return (
         <div className="flex items-center justify-center min-h-screen w-full bg-background p-4">
@@ -34,12 +48,15 @@ export default function LoginPage() {
                 <div className="w-full md:w-1/2 bg-background p-12 lg:p-20 flex flex-col justify-center shadow-[0_0_40px_rgba(0,0,0,0.2)]">
                     <h1 className="text-center font-semibold text-4xl mb-24 text-black">Вхід</h1>
 
-                    <form className="flex flex-col gap-6">
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+
                         <div className="flex flex-col gap-2">
                             <input
                                 type="email"
                                 placeholder="Електронна пошта"
                                 className="w-full border-primary border rounded-md py-3 px-4 text-base outline-none focus:ring-2 ring-primary/20 transition-all"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
                         </div>
@@ -49,6 +66,8 @@ export default function LoginPage() {
                                 type="password"
                                 placeholder="Пароль"
                                 className="w-full border-primary border rounded-md py-3 px-4 text-base outline-none focus:ring-2 ring-primary/20 transition-all"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
                         </div>
@@ -67,11 +86,18 @@ export default function LoginPage() {
                             </a>
                         </div>
 
+                        {login.isError && (
+                            <p className="text-red-400 text-sm text-center">
+                                Невірна електронна пошта або пароль
+                            </p>
+                        )}
+
                         <button
                             type="submit"
-                            className="w-full md:w-max md:self-center mt-10 py-2 px-6 font-semibold text-background bg-primary rounded-xl hover:opacity-90 transition-opacity text-lg"
+                            disabled={login.isPending}
+                            className="w-full md:w-max md:self-center mt-10 py-2 px-6 font-semibold text-background bg-primary rounded-xl hover:opacity-90 transition-opacity text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Увійти
+                            {login.isPending ? "Вхід..." : "Увійти"}
                         </button>
                     </form>
                 </div>

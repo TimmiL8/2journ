@@ -26,7 +26,7 @@ export default function SidePanel() {
                 <NavButton navPath={"/saved-places"} Icon={SavedIcon} title={"Saved Places"} />
                 <NavButton navPath={"/profile"} Icon={ProfileIcon} title={"Profile"} />
             </div>
-            <NavButton navPath={"/LogOut"} Icon={LogOutIcon} title={"Log out"} />
+            <NavButton navPath={"/logout"} Icon={LogOutIcon} title={"Log out"} />
         </div>
     )
 }

@@ -4,6 +4,7 @@ import { Mulish } from 'next/font/google';
 import Header from "./components/Header";
 import SidePanel from "./components/SidePanel";
 import "./globals.css";
+import QueryProvider from "@/app/providers/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,20 +29,9 @@ export default function RootLayout({children,}: Readonly<{
     return (
         <html lang="uk">
             <body className={`${mulish.variable} font-sans antialiased`}>
-                <div className="flex flex-col h-screen overflow-hidden bg-[#F3E8FF]">
-                    <Header />
-
-                    <div className="flex flex-1 overflow-hidden">
-
-                        <aside className="h-full p-9 pr-0">
-                            <SidePanel />
-                        </aside>
-
-                        <main className="flex-1 overflow-y-auto p-9">
-                            {children}
-                        </main>
-                    </div>
-                </div>
+                <QueryProvider>
+                    {children}
+                </QueryProvider>
             </body>
         </html>
     );
