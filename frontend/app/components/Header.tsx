@@ -24,7 +24,7 @@ export default function Header() {
                         </div>
                         <div className="text-white">
                             <h3 className="text-base leading-tight">Username</h3>
-                            <p className="text-xs leading-tight">Travel Master</p>
+                            <p className="text-xs leading-tight">Travel master</p>
                         </div>
                     </div>
                 </Link>
